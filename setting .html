@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700;900&display=swap" rel="stylesheet">
+    <title>GamerZone - Settings</title>
+    <style>
+        :root {
+            --primary-red: #ff3d44;
+            --bg-dark: #070707;
+            --card-bg: #1a1a1a;
+            --input-bg: #252525;
+        }
+
+        html, body {
+            margin: 0;
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--bg-dark);
+            color: #fff;
+            overflow-x: hidden;
+        }
+
+        /* --- Header (Shared Style) --- */
+        .main-header {
+            background-color: var(--card-bg);
+            border-bottom: 2px solid var(--primary-red);
+            padding: 0 40px;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo {
+            font-size: 24px; font-weight: 900; color: var(--primary-red);
+            text-decoration: none; display: flex; align-items: center; gap: 12px;
+        }
+
+        .logo-dot {
+            height: 14px; width: 14px; background-color: var(--primary-red);
+            border-radius: 50%; position: relative;
+        }
+
+        /* --- Settings Container --- */
+        .settings-container {
+            max-width: 1000px;
+            margin: 50px auto;
+            padding: 0 20px;
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 40px;
+        }
+
+        /* --- Sidebar --- */
+        .settings-sidebar {
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 20px;
+            height: fit-content;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .sidebar-menu {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .sidebar-item {
+            padding: 15px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-bottom: 5px;
+            transition: 0.3s;
+            color: #aaa;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .sidebar-item:hover, .sidebar-item.active {
+            background: rgba(255, 61, 68, 0.1);
+            color: var(--primary-red);
+        }
+
+        .sidebar-item.active {
+            border-left: 4px solid var(--primary-red);
+            font-weight: bold;
+        }
+
+        /* --- Main Content --- */
+        .settings-main {
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 40px;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .section-header {
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+
+        .section-header h2 {
+            margin: 0;
+            font-size: 24px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* --- Form Elements --- */
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 10px;
+            color: #ddd;
+            font-size: 14px;
+        }
+
+        .form-control {
+            width: 100%;
+            background: var(--input-bg);
+            border: 1px solid rgba(255,255,255,0.1);
+            padding: 12px 15px;
+            border-radius: 8px;
+            color: #fff;
+            outline: none;
+            transition: 0.3s;
+            box-sizing: border-box;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary-red);
+            box-shadow: 0 0 10px rgba(255, 61, 68, 0.2);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        /* --- Toggle Switch --- */
+        .switch-group {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 24px;
+        }
+
+        .switch input { opacity: 0; width: 0; height: 0; }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: #444;
+            transition: .4s;
+            border-radius: 34px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 18px; width: 18px;
+            left: 3px; bottom: 3px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider { background-color: var(--primary-red); }
+        input:checked + .slider:before { transform: translateX(26px); }
+
+        .btn-save {
+            background: var(--primary-red);
+            color: #fff;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 8px;
+            font-weight: bold;
+            text-transform: uppercase;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: 0.3s;
+        }
+
+        .btn-save:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(255, 61, 68, 0.4);
+        }
+
+        @media (max-width: 768px) {
+            .settings-container { grid-template-columns: 1fr; }
+            .form-row { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="main-header">
+        <a href="home.html" class="logo">
+            <div class="logo-dot"></div> GAMERZONE
+        </a>
+        <a href="home.html" style="color: #fff; text-decoration: none; font-size: 14px;">← Back to Home</a>
+    </header>
+
+    <div class="settings-container">
+        <aside class="settings-sidebar">
+            <ul class="sidebar-menu">
+                <li class="sidebar-item active">👤 Account Profile</li>
+                <li class="sidebar-item">
+                <a href="payment .html" style="text-decoration: none; color: inherit;">💳 Payment Methods</a></li>
+                <li class="sidebar-item">
+                <a href="Game setting.html" style="text-decoration: none; color: inherit;">🎮 Game Settings</a></li>
+                <li class="sidebar-item">
+                <a href="login.html" style="color: #ff3d44; text-decoration: none;">🚪 Logout</a>
+</li>
+            </ul>
+        </aside>
+
+        <main class="settings-main">
+            <section id="profile">
+                <div class="section-header">
+                    <h2>Account Settings</h2>
+                </div>
+
+                <div class="form-group">
+                    <label>Profile Avatar</label>
+                    <div style="display: flex; align-items: center; gap: 20px;">
+                        <img src="images/pngtree-user-icon-isolated-on-abstract-background-png-image_1875037.jpg" style="border-radius: 50%; border: 2px solid var(--primary-red); width: 80px; height: 80px; object-fit: cover;" alt="Profile Avatar">
+                        <button class="f-btn" style="background: var(--input-bg); border: 1px solid #444; color: #fff; padding: 8px 15px; border-radius: 5px; cursor: pointer;">Change Photo</button>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Username</label>
+                        <input type="text" class="form-control" value="GamerPro_2026">
+                    </div>
+                    <div class="form-group">
+                        <label>Email Address</label>
+                        <input type="email" class="form-control" value="user@example.com">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Bio</label>
+                    <textarea class="form-control" rows="4" placeholder="Tell the community about yourself..."></textarea>
+                </div>
+
+                <div class="section-header" style="margin-top: 40px;">
+                    <h2>Preferences</h2>
+                </div>
+
+                <div class="switch-group">
+                    <div>
+                        <div style="font-weight: bold;">Public Profile</div>
+                        <div style="font-size: 12px; color: #777;">Allow others to see your stats and library.</div>
+                    </div>
+                    <label class="switch">
+                        <input type="checkbox" checked>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+
+                <div class="switch-group">
+                    <div>
+                        <div style="font-weight: bold;">Two-Factor Authentication</div>
+                        <div style="font-size: 12px; color: #777;">Secure your account with a mobile code.</div>
+                    </div>
+                    <label class="switch">
+                        <input type="checkbox">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+
+                <button class="btn-save">Save Changes</button>
+            </section>
+        </main>
+    </div>
+
+</body>
+</html>

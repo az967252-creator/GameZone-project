@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <title>Sign Up</title>
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background: linear-gradient(180deg, #070707 0%, #121212 100%);
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* الحاوية الخارجية المسؤولة عن التوهج اللوني */
+        .card {
+            background-image: linear-gradient(163deg, #ff3d44 0%, #3700ff 100%);
+            border-radius: 22px;
+            transition: all 0.3s;
+            width: 100%;
+            max-width: 400px; /* نفس عرض الفورم */
+        }
+
+        /* الحاوية الداخلية المسؤولة عن حركة الانكماش */
+        .card2 {
+            border-radius: 20px;
+            transition: all 0.2s;
+            background-color: #1a1a1a;
+        }
+
+        /* تأثيرات الـ Hover كما في ملف login.html */
+        .card2:hover {
+            transform: scale(0.98);
+            border-radius: 20px;
+        }
+
+        .card:hover {
+            box-shadow: 0px 0px 30px 1px rgba(255, 61, 68, 0.3);
+        }
+
+        .form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            padding: 25px;
+            color: #fff;
+            box-sizing: border-box;
+        }
+
+        .title {
+            font-size: 28px;
+            font-weight: 600;
+            letter-spacing: -1px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            padding-left: 30px;
+            color: #ff3d44;
+            margin: 0;
+        }
+
+        .title::before, .title::after {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            border-radius: 50%;
+            left: 0px;
+            background-color: #ff3d44;
+        }
+
+        .title::after {
+            animation: pulse 1s linear infinite;
+        }
+
+        .message, .signin {
+            font-size: 14.5px;
+            color: rgba(255, 255, 255, 0.7);
+            margin: 0;
+        }
+
+        .signin { text-align: center; }
+        .signin a { color: #ff3d44; text-decoration: none; }
+        .signin a:hover { text-decoration: underline; }
+
+        .flex {
+            display: flex;
+            width: 100%;
+            gap: 10px;
+        }
+
+        .form label {
+            position: relative;
+            width: 100%;
+        }
+
+        .form label .input {
+            background-color: #333;
+            color: #fff;
+            width: 100%;
+            padding: 20px 10px 10px 10px;
+            outline: 0;
+            border: 1px solid rgba(105, 105, 105, 0.397);
+            border-radius: 10px;
+            box-sizing: border-box;
+        }
+
+        .form label .input + span {
+            color: rgba(255, 255, 255, 0.5);
+            position: absolute;
+            left: 10px;
+            top: 15px;
+            font-size: 0.9em;
+            cursor: text;
+            transition: 0.3s ease;
+        }
+
+        .form label .input:focus + span,
+        .form label .input:valid + span {
+            color: #ff3d44;
+            top: 5px;
+            font-size: 0.7em;
+            font-weight: 600;
+        }
+
+        .submit {
+            border: none;
+            padding: 12px;
+            border-radius: 10px;
+            color: #fff;
+            font-size: 16px;
+            background-color: #ff3d44;
+            cursor: pointer;
+            transition: 0.3s ease;
+            font-weight: bold;
+        }
+
+        .submit:hover {
+            background-color: #e6353b;
+        }
+
+        @keyframes pulse {
+            from { transform: scale(0.9); opacity: 1; }
+            to { transform: scale(1.8); opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <div class="card2">
+            <form class="form">
+                <p class="title">Register</p>
+                <p class="message">Signup now and get full access to our app.</p>
+                
+                <div class="flex">
+                    <label>
+                        <input class="input" type="text" placeholder="" required id="Firstname"/>
+                        <span>Firstname</span>
+                    </label>
+                    <label>
+                        <input class="input" type="text" placeholder="" required id="Lastname" />
+                        <span>Lastname</span>
+                    </label>
+                </div>
+
+                <label>
+                    <input class="input" type="email" placeholder="" required id="Email" />
+                    <span>Email</span>
+                </label>
+
+                <label>
+                    <input class="input" type="password" placeholder="" required id="Password"/>
+                    <span>Password</span>
+                </label>
+
+                <label>
+                    <input class="input" type="password" placeholder="" required id="Confirm password" />
+                    <span>Confirm password</span>
+                </label>
+
+                <button class="submit" onclick="ValidityState()">Submit</button>
+                <p class="signin">Already have an account? <a href="login.html">Signin</a></p>
+            </form>
+        </div>
+    </div>
+    <script>
+        function ValidityState() {
+            var Firstname = document.getElementById("Firstname").value;
+            var Lastname = document.getElementById("Lastname").value;
+            var Email = document.getElementById("Email").value;
+            var Password = document.getElementById("Password").value;
+            var ConfirmPassword = document.getElementById("Confirm password").value;
+            if ( !Firstname.trim() || !Lastname.trim() || !Email.trim() || !Password.trim() || !ConfirmPassword.trim() ) {alert("Fill all fields!");}
+            if(Password != ConfirmPassword){
+                alert("Passwords do not match!");return
+            }
+            
+        }
+    </script>
+
+</body>
+</html>

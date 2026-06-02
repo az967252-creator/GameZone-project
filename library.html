@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700;900&display=swap" rel="stylesheet">
+    <title>GamerZone - My Library</title>
+    <style>
+        :root {
+            --primary-red: #ff3d44;
+            --bg-dark: #070707;
+            --card-bg: #1a1a1a;
+            --accent-blue: #00d4ff;
+        }
+
+        html, body {
+            margin: 0;
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--bg-dark);
+            color: #fff;
+            overflow-x: hidden;
+        }
+
+        /* --- Header (Shared) --- */
+        .main-header {
+            background-color: var(--card-bg);
+            border-bottom: 2px solid var(--primary-red);
+            padding: 0 40px;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo {
+            font-size: 24px; font-weight: 900; color: var(--primary-red);
+            text-decoration: none; display: flex; align-items: center; gap: 12px;
+        }
+
+        .logo-dot {
+            height: 14px; width: 14px; background-color: var(--primary-red);
+            border-radius: 50%;
+        }
+
+        /* --- Library Layout --- */
+        .library-wrapper {
+            max-width: 1400px;
+            margin: 40px auto;
+            padding: 0 40px;
+            display: grid;
+            grid-template-columns: 1fr 350px;
+            gap: 30px;
+        }
+
+        .section-title {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .section-title h2 {
+            font-size: 2rem;
+            text-transform: uppercase;
+            margin: 0;
+            letter-spacing: 2px;
+        }
+
+        .section-title .line {
+            flex-grow: 1;
+            height: 2px;
+            background: linear-gradient(to right, var(--primary-red), transparent);
+        }
+
+        /* --- Game List (List View) --- */
+        .library-list {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .library-item {
+            background: var(--card-bg);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: 0.3s;
+        }
+
+        .library-item:hover {
+            border-color: var(--primary-red);
+            transform: translateX(10px);
+            background: #222;
+        }
+
+        .game-thumb {
+            width: 120px;
+            height: 70px;
+            border-radius: 8px;
+            object-fit: cover;
+            margin-right: 20px;
+        }
+
+        .game-info {
+            flex-grow: 1;
+        }
+
+        .game-info h3 {
+            margin: 0 0 5px 0;
+            font-size: 1.1rem;
+        }
+
+        .game-meta {
+            font-size: 13px;
+            color: #888;
+        }
+
+        .game-status {
+            text-align: right;
+            margin-left: 20px;
+            min-width: 150px;
+        }
+
+        .btn-play {
+            background: var(--primary-red);
+            color: white;
+            border: none;
+            padding: 8px 25px;
+            border-radius: 5px;
+            font-weight: bold;
+            cursor: pointer;
+            text-transform: uppercase;
+            transition: 0.3s;
+        }
+
+        .btn-play:hover {
+            box-shadow: 0 0 15px var(--primary-red);
+        }
+
+        .download-bar {
+            width: 100%;
+            height: 4px;
+            background: #333;
+            border-radius: 2px;
+            margin-top: 8px;
+            overflow: hidden;
+        }
+
+        .progress {
+            height: 100%;
+            background: var(--accent-blue);
+            width: 45%;
+        }
+
+        /* --- Sidebar Stats --- */
+        .stats-sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .stat-card {
+            background: var(--card-bg);
+            padding: 25px;
+            border-radius: 15px;
+            border-bottom: 3px solid var(--primary-red);
+        }
+
+        .stat-card h4 {
+            margin: 0 0 15px 0;
+            color: #777;
+            text-transform: uppercase;
+            font-size: 12px;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 900;
+        }
+
+        .recent-activity {
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 15px;
+        }
+
+        .activity-item {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .activity-item:last-child { border: none; }
+
+        @media (max-width: 992px) {
+            .library-wrapper { grid-template-columns: 1fr; }
+            .stats-sidebar { order: -1; }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="main-header">
+        <a href="home.html" class="logo">
+            <div class="logo-dot"></div> GAMERZONE
+        </a>
+        <nav style="display: flex; gap: 20px; align-items: center;">
+            <a href="store page.html" style="color: #aaa; text-decoration: none;">Store</a>
+            <a href="#" style="color: var(--primary-red); text-decoration: none; font-weight: bold;">Library</a>
+            <a href="setting .html" style="color: #aaa; text-decoration: none;">Settings</a>
+        </nav>
+    </header>
+
+    <div class="library-wrapper">
+        <main>
+            <div class="section-title">
+                <h2>My Games</h2>
+                <div class="line"></div>
+            </div>
+
+            <div class="library-list">
+                <div class="library-item">
+                    <img src="images/modern-warfare-2-cover-art.webp" class="game-thumb" alt="COD">
+                    <div class="game-info">
+                        <h3>Call of Duty: Modern Warfare II</h3>
+                        <div class="game-meta">Last played: 2 hours ago • 145.2 GB</div>
+                    </div>
+                    <div class="game-status">
+                        <button class="btn-play">Play Now</button>
+                    </div>
+                </div>
+
+                <div class="library-item">
+                    <img src="images/download (1).jpeg" class="game-thumb" alt="Elden Ring">
+                    <div class="game-info">
+                        <h3>Elden Ring</h3>
+                        <div class="game-meta" style="color: var(--accent-blue);">Downloading... 45% (12 MB/s)</div>
+                        <div class="download-bar"><div class="progress" style="width: 45%;"></div></div>
+                    </div>
+                    <div class="game-status">
+                        <span style="font-size: 12px; color: #777;">Remaining: 14m</span>
+                    </div>
+                </div>
+
+                <div class="library-item">
+                    <img src="images/download (3).jpeg" class="game-thumb" alt="Spider-Man">
+                    <div class="game-info">
+                        <h3>Spider-Man 2</h3>
+                        <div class="game-meta">Update Required • 12.5 GB</div>
+                    </div>
+                    <div class="game-status">
+                        <button class="btn-play" style="background: transparent; border: 1px solid var(--primary-red);">Update</button>
+                    </div>
+                </div>
+
+                <div class="library-item">
+                    <img src="images/OIP.webp" class="game-thumb" alt="RDR2">
+                    <div class="game-info">
+                        <h3>Red Dead Redemption 2</h3>
+                        <div class="game-meta">Total Playtime: 84h 12m</div>
+                    </div>
+                    <div class="game-status">
+                        <button class="btn-play">Play Now</button>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <aside class="stats-sidebar">
+            <div class="stat-card">
+                <h4>Total Playtime</h4>
+                <div class="stat-value">1,248 <small style="font-size: 14px; color: #555;">Hours</small></div>
+            </div>
+
+            <div class="recent-activity">
+                <h4 style="margin-bottom: 20px; font-size: 14px; color: var(--primary-red);">Recent Achievements</h4>
+                
+                <div class="activity-item">
+                    <div style="width: 40px; height: 40px; background: #333; border-radius: 50%; display: flex; align-items: center; justify-content: center;">🏆</div>
+                    <div>
+                        <div style="font-size: 14px; font-weight: bold;">True Elden Lord</div>
+                        <div style="font-size: 11px; color: #666;">Earned in Elden Ring</div>
+                    </div>
+                </div>
+
+                <div class="activity-item">
+                    <div style="width: 40px; height: 40px; background: #333; border-radius: 50%; display: flex; align-items: center; justify-content: center;">⭐</div>
+                    <div>
+                        <div style="font-size: 14px; font-weight: bold;">Sharpshooter</div>
+                        <div style="font-size: 11px; color: #666;">Earned in Warzone 2.0</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="stat-card" style="border-color: var(--accent-blue);">
+                <h4>Storage Used</h4>
+                <div class="stat-value">642 <small style="font-size: 14px; color: #555;">GB</small></div>
+                <div class="download-bar"><div class="progress" style="width: 70%; background: var(--accent-blue);"></div></div>
+            </div>
+        </aside>
+    </div>
+
+</body>
+</html>

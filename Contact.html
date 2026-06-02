@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <title>Contact Us</title>
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background: linear-gradient(180deg, #070707 0%, #121212 100%);
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* الحاوية الخارجية المتوهجة (نفس استايل الصفحات السابقة) */
+        .card {
+            background-image: linear-gradient(163deg, #ff3d44 0%, #3700ff 100%);
+            border-radius: 22px;
+            transition: all 0.3s;
+            width: 100%;
+            max-width: 600px; /* عرض أكبر قليلاً ليناسب الرسالة */
+        }
+
+        /* الحاوية الداخلية */
+        .card2 {
+            border-radius: 20px;
+            transition: all 0.2s;
+            background-color: #1a1a1a;
+        }
+
+        .card2:hover {
+            transform: scale(0.98);
+        }
+
+        .card:hover {
+            box-shadow: 0px 0px 30px 1px rgba(255, 61, 68, 0.3);
+        }
+
+        .form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            padding: 30px;
+            color: #fff;
+            box-sizing: border-box;
+        }
+
+        .title {
+            font-size: 28px;
+            font-weight: 600;
+            letter-spacing: -1px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            padding-left: 30px;
+            color: #ff3d44;
+            margin: 0;
+        }
+
+        .title::before, .title::after {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            border-radius: 50%;
+            left: 0px;
+            background-color: #ff3d44;
+        }
+
+        .title::after {
+            animation: pulse 1s linear infinite;
+        }
+
+        .message {
+            font-size: 14.5px;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 10px;
+        }
+
+        .form label {
+            position: relative;
+            width: 100%;
+        }
+
+        .form label .input, .form label .textarea {
+            background-color: #333;
+            color: #fff;
+            width: 100%;
+            padding: 20px 10px 10px 10px;
+            outline: 0;
+            border: 1px solid rgba(105, 105, 105, 0.397);
+            border-radius: 10px;
+            box-sizing: border-box;
+            font-family: inherit;
+        }
+
+        .form label .textarea {
+            height: 120px;
+            resize: none;
+        }
+
+        .form label span {
+            color: rgba(255, 255, 255, 0.5);
+            position: absolute;
+            left: 10px;
+            top: 15px;
+            font-size: 0.9em;
+            cursor: text;
+            transition: 0.3s ease;
+        }
+
+        .form label .input:focus + span,
+        .form label .input:valid + span,
+        .form label .textarea:focus + span,
+        .form label .textarea:valid + span {
+            color: #ff3d44;
+            top: 5px;
+            font-size: 0.7em;
+            font-weight: 600;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .submit, .back-btn {
+            flex: 1;
+            border: none;
+            padding: 12px;
+            border-radius: 10px;
+            color: #fff;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.3s ease;
+            font-weight: bold;
+            text-align: center;
+            text-decoration: none;
+        }
+
+        .submit {
+            background-color: #ff3d44;
+        }
+
+        .submit:hover {
+            background-color: #e6353b;
+        }
+
+        .back-btn {
+            background-color: #333;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .back-btn:hover {
+            background-color: #444;
+        }
+
+        @keyframes pulse {
+            from { transform: scale(0.9); opacity: 1; }
+            to { transform: scale(1.8); opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <div class="card2">
+            <form class="form">
+                <p class="title">Contact Us</p>
+                <p class="message">Please fill out the form below, and we’ll get back to you within 24 business hours.</p>
+
+                <label>
+                    <input class="input" type="email" required />
+                    <span>Company Email</span>
+                </label>
+
+                <label>
+                    <textarea class="textarea" required></textarea>
+                    <span>How Can We Help You?</span>
+                </label>
+
+                <div class="btn-group">
+                    <button type="submit" class="submit">Submit</button>
+                    <button type="button" class="back-btn" onclick="window.open('home.html', '_blank')">Back</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700;900&display=swap" rel="stylesheet">
+    <title>GamerZone - Game Settings</title>
+    <style>
+        :root {
+            --primary-red: #ff3d44;
+            --bg-dark: #070707;
+            --card-bg: #1a1a1a;
+            --input-bg: #252525;
+            --text-gray: #aaa;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--bg-dark);
+            color: #fff;
+        }
+
+        /* --- Header --- */
+        .main-header {
+            background-color: var(--card-bg);
+            border-bottom: 2px solid var(--primary-red);
+            padding: 0 40px;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            font-size: 24px; font-weight: 900; color: var(--primary-red);
+            text-decoration: none; display: flex; align-items: center; gap: 12px;
+        }
+
+        .logo-dot { height: 14px; width: 14px; background-color: var(--primary-red); border-radius: 50%; }
+
+        .settings-wrapper {
+            max-width: 1000px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .settings-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            overflow: hidden;
+        }
+
+        /* --- Tabs Navigation --- */
+        .settings-nav {
+            display: flex;
+            background: rgba(0,0,0,0.3);
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .nav-btn {
+            padding: 20px 30px;
+            cursor: pointer;
+            color: var(--text-gray);
+            font-weight: bold;
+            text-transform: uppercase;
+            font-size: 13px;
+            letter-spacing: 1px;
+            transition: 0.3s;
+            border-bottom: 3px solid transparent;
+        }
+
+        .nav-btn.active {
+            color: var(--primary-red);
+            border-bottom: 3px solid var(--primary-red);
+            background: rgba(255, 61, 68, 0.05);
+        }
+
+        /* --- Content Sections --- */
+        .tab-content { display: none; padding: 40px; }
+        .tab-content.active { display: block; }
+
+        .graphic-preset {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .preset-btn {
+            background: var(--input-bg);
+            border: 1px solid #333;
+            color: #fff;
+            padding: 10px;
+            text-align: center;
+            border-radius: 8px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .preset-btn.active {
+            border-color: var(--primary-red);
+            background: rgba(255, 61, 68, 0.1);
+            box-shadow: 0 0 10px rgba(255, 61, 68, 0.2);
+        }
+
+        .setting-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+
+        /* Sliders for Volume */
+        .range-slider {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 200px;
+            height: 6px;
+            background: #444;
+            border-radius: 5px;
+            outline: none;
+        }
+        .range-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 18px;
+            height: 18px;
+            background: var(--primary-red);
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        select.custom-select {
+            background: var(--input-bg);
+            color: #fff;
+            border: 1px solid #444;
+            padding: 8px 15px;
+            border-radius: 5px;
+            outline: none;
+        }
+
+        .switch { position: relative; display: inline-block; width: 44px; height: 22px; }
+        .switch input { opacity: 0; width: 0; height: 0; }
+        .slider {
+            position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0;
+            background-color: #444; transition: .4s; border-radius: 34px;
+        }
+        .slider:before {
+            position: absolute; content: ""; height: 16px; width: 16px; left: 3px; bottom: 3px;
+            background-color: white; transition: .4s; border-radius: 50%;
+        }
+        input:checked + .slider { background-color: var(--primary-red); }
+        input:checked + .slider:before { transform: translateX(22px); }
+
+        .btn-save-settings {
+            background: var(--primary-red); color: #fff; border: none; padding: 15px 40px;
+            border-radius: 8px; font-weight: 900; text-transform: uppercase;
+            cursor: pointer; float: right; margin-top: 30px; margin-bottom: 30px;
+        }
+
+    </style>
+</head>
+<body>
+
+    <header class="main-header">
+        <a href="#" class="logo"><div class="logo-dot"></div> GAMERZONE</a>
+    </header>
+
+    <div class="settings-wrapper">
+        <h2 style="margin-bottom: 30px; text-transform: uppercase; letter-spacing: 2px;">Game Settings</h2>
+        
+        <div class="settings-card">
+            <div class="settings-nav">
+                <div class="nav-btn active" onclick="activateTab(this, 'graphics')">Graphics</div>
+                <div class="nav-btn" onclick="activateTab(this, 'audio')">Audio</div>
+                <div class="nav-btn" onclick="activateTab(this, 'controls')">Controls</div>
+                <div class="nav-btn" onclick="activateTab(this, 'interface')">Interface</div>
+            </div>
+
+            <div id="graphics" class="tab-content active">
+                <h3 style="color: var(--primary-red); font-size: 14px; margin-bottom: 20px;">Performance Presets</h3>
+                <div class="graphic-preset">
+                    <div class="preset-btn" onclick="activatePreset(this)">Low</div>
+                    <div class="preset-btn active" onclick="activatePreset(this)">Medium</div>
+                    <div class="preset-btn" onclick="activatePreset(this)">High</div>
+                    <div class="preset-btn" onclick="activatePreset(this)">Ultra</div>
+                </div>
+
+                <div class="setting-row">
+                    <div>
+                        <h4 style="margin:0">Display Resolution</h4>
+                        <p style="margin:5px 0 0; font-size:12px; color:var(--text-gray)">Set your screen resolution.</p>
+                    </div>
+                    <select class="custom-select">
+                        <option>1920 x 1080</option>
+                        <option selected>2560 x 1440</option>
+                    </select>
+                </div>
+
+                <div class="setting-row">
+                    <div>
+                        <h4 style="margin:0">Vertical Sync (V-Sync)</h4>
+                        <p style="margin:5px 0 0; font-size:12px; color:var(--text-gray)">Limit FPS to monitor refresh rate.</p>
+                    </div>
+                    <label class="switch">
+                        <input type="checkbox" checked>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+            </div>
+
+            <div id="audio" class="tab-content">
+                <div class="setting-row">
+                    <div>
+                        <h4 style="margin:0">Master Volume</h4>
+                        <p style="margin:5px 0 0; font-size:12px; color:var(--text-gray)">Overall game volume.</p>
+                    </div>
+                    <input type="range" class="range-slider" min="0" max="100" value="80">
+                </div>
+                <div class="setting-row">
+                    <div>
+                        <h4 style="margin:0">Music Volume</h4>
+                        <p style="margin:5px 0 0; font-size:12px; color:var(--text-gray)">Background music level.</p>
+                    </div>
+                    <input type="range" class="range-slider" min="0" max="100" value="50">
+                </div>
+                <div class="setting-row">
+                    <div>
+                        <h4 style="margin:0">Voice Chat</h4>
+                        <p style="margin:5px 0 0; font-size:12px; color:var(--text-gray)">Enable communication with players.</p>
+                    </div>
+                    <label class="switch">
+                        <input type="checkbox" checked>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+            </div>
+
+            <div id="controls" class="tab-content">
+                <div class="setting-row">
+                    <div>
+                        <h4 style="margin:0">Mouse Sensitivity</h4>
+                        <p style="margin:5px 0 0; font-size:12px; color:var(--text-gray)">Adjust camera movement speed.</p>
+                    </div>
+                    <input type="range" class="range-slider" min="1" max="20" value="10">
+                </div>
+                <div class="setting-row">
+                    <div>
+                        <h4 style="margin:0">Invert Y-Axis</h4>
+                        <p style="margin:5px 0 0; font-size:12px; color:var(--text-gray)">Reverse vertical mouse movement.</p>
+                    </div>
+                    <label class="switch">
+                        <input type="checkbox">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+            </div>
+
+            <div id="interface" class="tab-content">
+                <div class="setting-row">
+                    <div>
+                        <h4 style="margin:0">Language</h4>
+                        <p style="margin:5px 0 0; font-size:12px; color:var(--text-gray)">Select in-game text language.</p>
+                    </div>
+                    <select class="custom-select">
+                        <option selected>English</option>
+                        <option>Arabic</option>
+                        <option>French</option>
+                    </select>
+                </div>
+                <div class="setting-row">
+                    <div>
+                        <h4 style="margin:0">Show FPS Counter</h4>
+                        <p style="margin:5px 0 0; font-size:12px; color:var(--text-gray)">Display frames per second in corner.</p>
+                    </div>
+                    <label class="switch">
+                        <input type="checkbox">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+            </div>
+            <div style="padding: 0 40px;">
+            <a href="home.html"><button class="btn-save-settings">Save Changes</button></a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function activateTab(element, tabId) {
+            // 1. إخفاء كل المحتويات
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+
+            // 2. إزالة Active من كل الأزرار
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+
+            // 3. إظهار المحتوى المختار
+            document.getElementById(tabId).classList.add('active');
+            
+            // 4. جعل الزر الحالي Active
+            element.classList.add('active');
+        }
+
+        function activatePreset(element) {
+            document.querySelectorAll('.preset-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            element.classList.add('active');
+        }
+    </script>
+
+</body>
+</html>

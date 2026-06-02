@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700;900&display=swap" rel="stylesheet">
+    <title>GamerZone - Home</title>
+    <style>
+        :root {
+            --primary-red: #ff3d44;
+            --bg-dark: #070707;
+            --card-bg: #1a1a1a;
+        }
+
+        html, body {
+            margin: 0;
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--bg-dark);
+            color: #fff;
+            scroll-behavior: smooth;
+            overflow-x: hidden;
+        }
+
+        /* --- Header Section --- */
+        .main-header {
+            background-color: var(--card-bg);
+            border-bottom: 2px solid var(--primary-red);
+            padding: 0 40px;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0px 4px 20px rgba(255, 61, 68, 0.2);
+        }
+
+        .logo {
+            font-size: 24px; font-weight: 900; color: var(--primary-red);
+            text-decoration: none; display: flex; align-items: center; gap: 12px;
+        }
+
+        .logo-dot {
+            height: 14px; width: 14px; background-color: var(--primary-red);
+            border-radius: 50%; position: relative;
+        }
+
+        .logo-dot::after {
+            content: ""; position: absolute; width: 100%; height: 100%;
+            background-color: var(--primary-red); border-radius: 50%;
+            animation: pulse 1.5s linear infinite;
+        }
+
+        /* --- Navigation & Menu --- */
+        .nav-container { display: flex; align-items: center; gap: 30px; height: 100%; }
+        .nav-item {
+            color: rgba(255, 255, 255, 0.8); text-decoration: none;
+            font-weight: 500; font-size: 16px; position: relative;
+            padding: 10px 5px; transition: 0.3s;
+        }
+
+        .nav-item::after, .menu-container::after {
+            content: ''; position: absolute; width: 0; height: 2px;
+            bottom: -5px; left: 0; background-color: var(--primary-red); transition: width 0.3s ease;
+        }
+
+        .nav-item:hover::after, .dropdown:hover .menu-container::after { width: 100%; }
+        .nav-item:hover, .dropdown:hover .menu-text { color: var(--primary-red); }
+
+        .dropdown { position: relative; display: flex; align-items: center; }
+        .menu-container { display: flex; align-items: center; gap: 10px; cursor: pointer; padding: 10px 5px; position: relative; }
+        .menu-text { font-weight: 500; font-size: 16px; color: rgba(255, 255, 255, 0.8); transition: 0.3s; }
+        
+        .hamburger { width: 20px; height: 14px; display: flex; flex-direction: column; justify-content: space-between; }
+        .hamburger span { display: block; height: 2px; width: 100%; background-color: var(--primary-red); border-radius: 10px; transition: 0.3s; }
+        
+        .dropdown:hover .hamburger span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+        .dropdown:hover .hamburger span:nth-child(2) { opacity: 0; }
+        .dropdown:hover .hamburger span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+
+        .dropdown-content {
+            display: none; position: absolute; right: 0; top: 100%;
+            background-color: var(--card-bg); min-width: 180px;
+            border: 1px solid var(--primary-red); border-radius: 0 0 10px 10px;
+            overflow: hidden; animation: slideDown 0.3s ease-out;
+        }
+        .dropdown:hover .dropdown-content { display: block; }
+        .dropdown-content a { color: #fff; padding: 12px 20px; text-decoration: none; display: block; font-size: 14px; transition: 0.2s; }
+        .dropdown-content a:hover { background-color: rgba(255, 61, 68, 0.1); color: var(--primary-red); padding-left: 25px; }
+        .divider { height: 1px; background: rgba(255,255,255,0.1); margin: 5px 0; }
+
+        .btn-signin {
+            background-color: var(--primary-red); color: white; padding: 8px 20px;
+            border-radius: 8px; text-decoration: none; font-weight: bold;
+            font-size: 14px; transition: 0.3s; border: 1px solid var(--primary-red);
+        }
+
+        /* --- Hero Section --- */
+        .hero-section { position: relative; height: 520px; width: 100%; overflow: hidden; background-color: #000; }
+        .hero-slider { display: flex; height: 100%; width: 300%; transition: transform 1.2s cubic-bezier(0.7, 0, 0.3, 1); }
+        .slide { width: 100vw; height: 100%; background-size: cover; background-position: center; position: relative; display: flex; align-items: center; flex-shrink: 0; }
+        .slide::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(to right, rgba(0,0,0,0.85) 15%, rgba(0,0,0,0.2) 100%); z-index: 1; }
+        
+        .hero-content { position: relative; z-index: 10; padding: 0 60px; max-width: 650px; opacity: 0; transform: translateX(-30px); transition: 0.8s ease-out 0.4s; }
+        .slide.active-content .hero-content { opacity: 1; transform: translateX(0); }
+        .hero-content h1 { font-size: 3.5rem; font-weight: 900; margin-bottom: 15px; text-transform: uppercase; line-height: 1.1; }
+        .hero-content p { font-size: 1.1rem; color: #ddd; margin-bottom: 25px; }
+        .btn-main { padding: 12px 35px; background-color: var(--primary-red); color: white; text-decoration: none; font-weight: 900; text-transform: uppercase; border-radius: 4px; display: inline-block; transition: 0.3s; }
+
+        /* --- Filter Bar Style --- */
+        .filter-section {
+            max-width: 1300px; margin: 40px auto 0; padding: 0 40px;
+            display: flex; justify-content: space-between; align-items: center;
+            flex-wrap: wrap; gap: 20px;
+        }
+        .filter-btns { display: flex; gap: 10px; flex-wrap: wrap; }
+        .f-btn {
+            background: var(--card-bg); border: 1px solid rgba(255,255,255,0.1);
+            color: #fff; padding: 8px 20px; border-radius: 30px; cursor: pointer;
+            font-size: 14px; transition: 0.3s;
+        }
+        .f-btn.active, .f-btn:hover { background: var(--primary-red); border-color: var(--primary-red); }
+        
+        .search-sort { display: flex; gap: 15px; align-items: center; }
+        .search-input {
+            background: var(--card-bg); border: 1px solid rgba(255,255,255,0.1);
+            color: #fff; padding: 10px 15px; border-radius: 8px; outline: none; width: 220px;
+        }
+        .search-input:focus { border-color: var(--primary-red); }
+        .sort-select {
+            background: var(--card-bg); border: 1px solid rgba(255,255,255,0.1);
+            color: #fff; padding: 10px; border-radius: 8px; cursor: pointer;
+        }
+
+        /* --- Game Grid Section --- */
+        .games-container { padding: 40px 40px 80px; max-width: 1300px; margin: 0 auto; }
+        .section-title { display: flex; align-items: center; gap: 20px; margin-bottom: 40px; }
+        .section-title h2 { font-size: 1.8rem; text-transform: uppercase; margin: 0; letter-spacing: 2px; }
+        .section-title .line { flex-grow: 1; height: 2px; background: linear-gradient(to right, var(--primary-red), transparent); }
+
+        .game-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 25px; }
+        .game-card { background: var(--card-bg); border-radius: 12px; overflow: hidden; border: 1px solid rgba(255,255,255,0.05); transition: 0.3s; cursor: pointer; }
+        .game-card:hover { transform: translateY(-10px); border-color: var(--primary-red); box-shadow: 0 10px 30px rgba(255, 61, 68, 0.2); }
+        
+        .card-img { position: relative; width: 100%; aspect-ratio: 16/9; overflow: hidden; }
+        .card-img img { width: 100%; height: 100%; object-fit: cover; transition: 0.5s; }
+        .game-card:hover .card-img img { transform: scale(1.1); }
+
+        .card-body { padding: 20px; }
+        .game-cat { font-size: 11px; color: var(--primary-red); font-weight: 700; text-transform: uppercase; margin-bottom: 8px; display: block; }
+        .game-card h3 { margin: 0 0 15px 0; font-size: 1.2rem; }
+        .card-footer { display: flex; justify-content: space-between; align-items: center; padding-top: 15px; border-top: 1px solid rgba(255,255,255,0.1); }
+        .price { font-weight: 700; }
+        .btn-view { font-size: 12px; border: 1px solid var(--primary-red); padding: 5px 15px; border-radius: 4px; color: #fff; text-decoration: none; transition: 0.3s; }
+        .game-card:hover .btn-view { background: var(--primary-red); }
+
+        @keyframes pulse { from { transform: scale(0.9); opacity: 1; } to { transform: scale(2.2); opacity: 0; } }
+        @keyframes slideDown { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        @media (max-width: 768px) {
+            .hero-section { height: 400px; }
+            .hero-content h1 { font-size: 2.2rem; }
+            .nav-item:not(.btn-signin) { display: none; }
+            .filter-section { flex-direction: column; align-items: stretch; }
+            .search-input { width: 100%; }
+        }
+        /* --- Community Section --- */
+.community-section {
+    padding: 80px 40px;
+    max-width: 1300px;
+    margin: 0 auto;
+    background: linear-gradient(180deg, var(--bg-dark) 0%, #111 100%);
+}
+
+.community-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    align-items: center;
+}
+
+.community-text h2 {
+    font-size: 2.5rem;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    color: #fff;
+}
+
+.community-text p {
+    color: #aaa;
+    line-height: 1.8;
+    margin-bottom: 30px;
+}
+
+.social-stats {
+    display: flex;
+    gap: 30px;
+    margin-bottom: 30px;
+}
+
+.stat-item {
+    text-align: center;
+}
+
+.stat-item span {
+    display: block;
+    font-size: 24px;
+    font-weight: 900;
+    color: var(--primary-red);
+}
+
+.stat-item label {
+    font-size: 12px;
+    color: #777;
+    text-transform: uppercase;
+}
+
+.discord-card {
+    background: #5865F2; /* Discord Color */
+    padding: 40px;
+    border-radius: 20px;
+    text-align: center;
+    transition: 0.3s;
+    box-shadow: 0 10px 40px rgba(88, 101, 242, 0.3);
+}
+
+.discord-card:hover {
+    transform: scale(1.02);
+}
+
+/* --- Footer Section --- */
+.main-footer {
+    background: #000;
+    border-top: 2px solid var(--primary-red);
+    padding: 60px 40px 20px;
+}
+
+.footer-content {
+    max-width: 1300px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 40px;
+    margin-bottom: 40px;
+}
+
+.footer-about .logo {
+    margin-bottom: 20px;
+}
+
+.footer-about p {
+    color: #777;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+.footer-links h4 {
+    margin-bottom: 20px;
+    font-size: 18px;
+    text-transform: uppercase;
+}
+
+.footer-links ul {
+    list-style: none;
+    padding: 0;
+}
+
+.footer-links li {
+    margin-bottom: 12px;
+}
+
+.footer-links a {
+    color: #777;
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+.footer-links a:hover {
+    color: var(--primary-red);
+    padding-left: 5px;
+}
+
+.footer-bottom {
+    max-width: 1300px;
+    margin: 0 auto;
+    padding-top: 20px;
+    border-top: 1px solid rgba(255,255,255,0.05);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #555;
+    font-size: 13px;
+}
+
+@media (max-width: 992px) {
+    .community-grid, .footer-content { grid-template-columns: 1fr; text-align: center; }
+    .community-text h2 { font-size: 2rem; }
+    .social-stats { justify-content: center; }
+    .footer-bottom { flex-direction: column; gap: 10px; }
+}
+    </style>
+</head>
+<body>
+
+    <header class="main-header">
+        <a href="#" class="logo">
+            <div class="logo-dot"></div> GAMERZONE
+        </a>
+        <div class="nav-container">
+            <a href="home.html" class="nav-item">Home</a>
+            <a href="store page.html" class="nav-item">Store</a>
+            <div class="dropdown">
+                <div class="menu-container">
+                    <div class="hamburger"><span></span><span></span><span></span></div>
+                    <span class="menu-text">Menu</span>
+                </div>
+                <div class="dropdown-content">
+                    <a href="library.html">Library</a>
+                    <a href="setting .html">Settings</a>
+                    <div class="divider"></div>
+                    <a href="Contact.html" target="_blank">Contact Us</a>
+                </div>
+            </div>
+            <a href="login.html" class="btn-signin">Log In</a>
+        </div>
+    </header>
+
+    <section class="hero-section">
+        <div class="hero-slider" id="slider">
+            <div class="slide active-content" style="background-image: url('images/modern-warfare-2-cover-art.webp');">
+                <div class="hero-content">
+                    <h1>COD: Modern<br>Warfare II</h1>
+                    <p>The ultimate weapon is team. Join the fight in the most immersive Call of Duty ever.</p>
+                    <a href="#" class="btn-main">Play Now</a>
+                </div>
+            </div>
+            <div class="slide" style="background-image: url('images/download.webp');">
+                <div class="hero-content">
+                    <h1>FC 26<br>New Era</h1>
+                    <p>The world's game. Experience hyper-realistic stadium atmospheres and next-gen physics.</p>
+                    <a href="#" class="btn-main">Pre-Order</a>
+                </div>
+            </div>
+            <div class="slide" style="background-image: url('images/OIP.webp');">
+                <div class="hero-content">
+                    <h1>Red Dead<br>Redemption 2</h1>
+                    <p>An epic tale of life in America's unforgiving heartland. The wild west era is ending.</p>
+                    <a href="#" class="btn-main">Explore</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="filter-section">
+        <div class="filter-btns">
+            <button class="f-btn active" onclick="filterByCategory('all')">All</button>
+            <button class="f-btn" onclick="filterByCategory('Action')">Action</button>
+            <button class="f-btn" onclick="filterByCategory('Sports')">Sports</button>
+            <button class="f-btn" onclick="filterByCategory('RPG')">RPG</button>
+            <button class="f-btn" onclick="filterByCategory('Story')">Story</button>
+        </div>
+        <div class="search-sort">
+            <input type="text" id="searchInput" class="search-input" placeholder="Search for games..." onkeyup="searchGame()">
+            <select class="sort-select" id="sortSelect" onchange="sortGames()">
+                <option value="default">Sort By</option>
+                <option value="low">Price: Low to High</option>
+                <option value="high">Price: High to Low</option>
+            </select>
+        </div>
+    </div>
+
+    <section class="games-container">
+        <div class="section-title">
+            <h2 id="currentCategory">Trending Games</h2>
+            <div class="line"></div>
+        </div>
+
+        <div class="game-grid" id="gameGrid">
+            <div class="game-card" data-category="Action Multiplayer" data-price="0">
+                <div class="card-img"><img src="images/MV5BN2EzNTg2MTMtYjA4Yi00ZmUzLWE5ZTktNDFiZGNmNjc0MTViXkEyXkFqcGc@._V1_.jpg" alt="Warzone"></div>
+                <div class="card-body">
+                    <span class="game-cat">Action • Multiplayer</span>
+                    <h3>Warzone 2.0</h3>
+                    <div class="card-footer"><span class="price">Free</span><a href="#" class="btn-view">Details</a></div>
+                </div>
+            </div>
+            <div class="game-card" data-category="Sports Football" data-price="69.99">
+                <div class="card-img"><img src="images/download.jpeg" alt="FC 24"></div>
+                <div class="card-body">
+                    <span class="game-cat">Sports • Football</span>
+                    <h3>EA Sports FC 24</h3>
+                    <div class="card-footer"><span class="price">$69.99</span><a href="#" class="btn-view">Details</a></div>
+                </div>
+            </div>
+            <div class="game-card" data-category="RPG Souls-like" data-price="59.99">
+                <div class="card-img"><img src="images/download (1).jpeg" alt="Elden Ring"></div>
+                <div class="card-body">
+                    <span class="game-cat">RPG • Souls-like</span>
+                    <h3>Elden Ring</h3>
+                    <div class="card-footer"><span class="price">$59.99</span><a href="#" class="btn-view">Details</a></div>
+                </div>
+            </div>
+            <div class="game-card" data-category="Story Action" data-price="69.99">
+                <div class="card-img"><img src="images/download (2).jpeg" alt="God of War"></div>
+                <div class="card-body">
+                    <span class="game-cat">Story • Action</span>
+                    <h3>GOW Ragnarök</h3>
+                    <div class="card-footer"><span class="price">$69.99</span><a href="#" class="btn-view">Details</a></div>
+                </div>
+            </div>
+            <div class="game-card" data-category="Action Hero" data-price="69.99">
+                <div class="card-img"><img src="images/download (3).jpeg" alt="Spider-man"></div>
+                <div class="card-body">
+                    <span class="game-cat">Action • Hero</span>
+                    <h3>Spider-Man 2</h3>
+                    <div class="card-footer"><span class="price">$69.99</span><a href="#" class="btn-view">Details</a></div>
+                </div>
+            </div>
+            <div class="game-card" data-category="Survival Story" data-price="49.99">
+                <div class="card-img"><img src="images/download (4).jpeg" alt="Last of Us"></div>
+                <div class="card-body">
+                    <span class="game-cat">Survival • Story</span>
+                    <h3>TLOU Part I</h3>
+                    <div class="card-footer"><span class="price">$49.99</span><a href="#" class="btn-view">Details</a></div>
+                </div>
+            </div>
+            <div class="game-card" data-category="RPG Sci-Fi" data-price="39.99">
+                <div class="card-img"><img src="images/download (5).jpeg" alt="Cyberpunk"></div>
+                <div class="card-body">
+                    <span class="game-cat">RPG • Sci-Fi</span>
+                    <h3>Cyberpunk 2077</h3>
+                    <div class="card-footer"><span class="price">$39.99</span><a href="#" class="btn-view">Details</a></div>
+                </div>
+            </div>
+            <div class="game-card" data-category="Tactical Co-op" data-price="39.99">
+                <div class="card-img"><img src="images/download (6).jpeg" alt="Helldivers"></div>
+                <div class="card-body">
+                    <span class="game-cat">Tactical • Co-op</span>
+                    <h3>Helldivers 2</h3>
+                    <div class="card-footer"><span class="price">$39.99</span><a href="#" class="btn-view">Details</a></div>
+                </div>
+            </div>
+            <div class="game-card" data-category="Horror Action" data-price="59.99">
+                <div class="card-img"><img src="images/download (7).jpeg" alt="Resident Evil"></div>
+                <div class="card-body">
+                    <span class="game-cat">Horror • Action</span>
+                    <h3>Resident Evil 4</h3>
+                    <div class="card-footer"><span class="price">$59.99</span><a href="#" class="btn-view">Details</a></div>
+                </div>
+            </div>
+            <div class="game-card" data-category="Open World Samuri" data-price="59.99">
+                <div class="card-img"><img src="images/download (8).jpeg" alt="Ghost of Tsushima"></div>
+                <div class="card-body">
+                    <span class="game-cat">Open World • Samuri</span>
+                    <h3>Ghost of Tsushima</h3>
+                    <div class="card-footer"><span class="price">$59.99</span><a href="#" class="btn-view">Details</a></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // --- Slider Logic ---
+        const slider = document.getElementById('slider');
+        const slides = document.querySelectorAll('.slide');
+        let currentIdx = 0;
+
+        function slideNext() {
+            slides[currentIdx].classList.remove('active-content');
+            currentIdx = (currentIdx + 1) % slides.length;
+            slider.style.transform = `translateX(-${(currentIdx * 100) / slides.length}%)`;
+            setTimeout(() => { slides[currentIdx].classList.add('active-content'); }, 300);
+        }
+        setInterval(slideNext, 6000);
+
+        // --- Filter Logic ---
+        function filterByCategory(category) {
+            const cards = document.querySelectorAll('.game-card');
+            const btns = document.querySelectorAll('.f-btn');
+            
+            btns.forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+
+            cards.forEach(card => {
+                const cardCat = card.getAttribute('data-category');
+                if (category === 'all' || cardCat.includes(category)) {
+                    card.style.display = "block";
+                } else {
+                    card.style.display = "none";
+                }
+            });
+        }
+
+        // --- Search Logic ---
+        function searchGame() {
+            const searchVal = document.getElementById('searchInput').value.toLowerCase();
+            const cards = document.querySelectorAll('.game-card');
+
+            cards.forEach(card => {
+                const title = card.querySelector('h3').innerText.toLowerCase();
+                if (title.includes(searchVal)) {
+                    card.style.display = "block";
+                } else {
+                    card.style.display = "none";
+                }
+            });
+        }
+
+        // --- Sort Logic ---
+        function sortGames() {
+            const grid = document.getElementById('gameGrid');
+            const cards = Array.from(grid.getElementsByClassName('game-card'));
+            const sortVal = document.getElementById('sortSelect').value;
+
+            if (sortVal === 'default') return;
+
+            cards.sort((a, b) => {
+                const priceA = parseFloat(a.getAttribute('data-price'));
+                const priceB = parseFloat(b.getAttribute('data-price'));
+                return sortVal === 'low' ? priceA - priceB : priceB - priceA;
+            });
+
+            grid.innerHTML = "";
+            cards.forEach(card => grid.appendChild(card));
+        }
+    </script>
+    <section class="community-section">
+        <div class="community-grid">
+            <div class="community-text">
+                <div class="section-title">
+                    <h2>Join Our Community</h2>
+                    <div class="line" style="width: 50px;"></div>
+                </div>
+                <p>Connect with millions of gamers worldwide. Participate in tournaments, share your best clips, and stay updated with the latest news from the gaming world.</p>
+                <div class="social-stats">
+                    <div class="stat-item"><span>1.2M+</span><label>Members</label></div>
+                    <div class="stat-item"><span>50K+</span><label>Online Now</label></div>
+                    <div class="stat-item"><span>200+</span><label>Tournaments</label></div>
+                </div>
+                <a href="#" class="btn-main">Join Facebook Group</a>
+            </div>
+            <div class="discord-invite">
+                <div class="discord-card">
+                    <img src="images/download.png" width="80" alt="Discord">
+                    <h3 style="font-size: 30px; margin: 20px 0;">Official Discord</h3>
+                    <p style="margin-bottom: 25px;">Chat with developers and other players in real-time.</p>
+                    <a href="#" class="btn-main" style="background: #fff; color: #5865F2;">Join Discord</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="main-footer">
+        <div class="footer-content">
+            <div class="footer-about">
+                <a href="#" class="logo">
+                    <div class="logo-dot"></div> GAMERZONE
+                </a>
+                <p>GamerZone is the leading digital marketplace for gamers. From the latest AAA titles to indie gems, we provide the best experience for our community since 2024.</p>
+            </div>
+            <div class="footer-links">
+                <h4>Marketplace</h4>
+                <ul>
+                    <li><a href="store page.html">Store</a></li>
+                    <li><a href="#">Trending</a></li>
+                    <li><a href="#">New Releases</a></li>
+                    <li><a href="#">Free Games</a></li>
+                </ul>
+            </div>
+            <div class="footer-links">
+                <h4>Support</h4>
+                <ul>
+                    <li><a href="Contact.html">Help Center</a></li>
+                    <li><a>Terms of Service</a></li>
+                    <li><a>Privacy Policy</a></li>
+                    <li><a>Refund Policy</a></li>
+                </ul>
+            </div>
+            <div class="footer-links">
+                <h4>Contact</h4>
+                <ul>
+                    <li><a href="#">support@gamerzone.com</a></li>
+                    <li><a href="#">Facebook</a></li>
+                    <li><a href="#">Instagram</a></li>
+                    <li><a href="#">Twitter (X)</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 GAMERZONE. All rights reserved.</p>
+            <p>Designed with Ahmed Zain for Gamers</p>
+        </div>
+    </footer>
+</body>
+
+</html>
